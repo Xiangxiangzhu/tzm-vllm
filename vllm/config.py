@@ -185,6 +185,11 @@ class ModelConfig:
 
     def _verify_embedding_mode(self) -> None:
         architectures = getattr(self.hf_config, "architectures", [])
+
+        # FIXME: Speical handling for gte-Qwen2
+        if "gte-Qwen2" in self.model:
+            architectures = ["Qwen2EmbeddingModel"]
+
         self.embedding_mode = any(
             ModelRegistry.is_embedding_model(arch) for arch in architectures)
 
@@ -263,7 +268,12 @@ class ModelConfig:
                 f"({tensor_parallel_size}).")
 
         pipeline_parallel_size = parallel_config.pipeline_parallel_size
-        architectures = getattr(self.hf_config, "architectures", [])
+        architectures = getattr(self.hf_config, "architectures", [])i
+
+        # FIXME: Special handling for gte-Qwen series
+        if "gte-Qwen2" in self.model:
+            architectures = ["Qwen2EmbeddingModel"]
+
         if not all(arch in _PP_SUPPORTED_MODELS
                    for arch in architectures) and pipeline_parallel_size > 1:
             raise NotImplementedError(
