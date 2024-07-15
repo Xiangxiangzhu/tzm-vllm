@@ -268,7 +268,7 @@ class ModelConfig:
                 f"({tensor_parallel_size}).")
 
         pipeline_parallel_size = parallel_config.pipeline_parallel_size
-        architectures = getattr(self.hf_config, "architectures", [])i
+        architectures = getattr(self.hf_config, "architectures", [])
 
         # FIXME: Special handling for gte-Qwen series
         if "gte-Qwen2" in self.model:
